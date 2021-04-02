@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+    stages {
+        stage('git repo & clean') {
+            steps {
+               ssh "rmdir  /s /q TicketBookingServicetTesting"
+                ssh "https://github.com/gurudeepika94/Ticketbookingservice.git"
+                ssh "mvn clean -f TicketBookingServiceTesting"
+            }
+        }
+        stage('install') {
+            steps {
+                ssh "mvn install -f TicketBookingServiceTesting"
+            }
+        }
+        stage('test') {
+            steps {
+                ssh "mvn test -f TicketBookingServiceTesting"
+            }
+        }
+        stage('package') {
+            steps {
+                ssh "mvn package -f TicketBookingServiceTesting"
+            }
+        }
+    }
+}
